@@ -352,7 +352,7 @@ QUnit.test('callback for overlay ready', function(assert) {
 });
 
 QUnit.test('callback for overlay being shown', function(assert) {
-  assert.expect(1);
+  assert.expect(2);
   let show = false;
 
   this.player.overlay({
@@ -368,10 +368,16 @@ QUnit.test('callback for overlay being shown', function(assert) {
   this.player.trigger('showoverlay');
 
   assert.strictEqual(show, true, 'overlay shown');
+
+  // make sure callback is not called twice
+  show = false;
+  this.player.trigger('showoverlay');
+
+  assert.strictEqual(show, false, 'overlay shown');
 });
 
 QUnit.test('callback for overlay being hidden', function(assert) {
-  assert.expect(1);
+  assert.expect(2);
   let hide = false;
 
   this.player.overlay({
@@ -385,6 +391,12 @@ QUnit.test('callback for overlay being hidden', function(assert) {
   });
 
   assert.strictEqual(hide, true, 'overlay hidden');
+
+  // make sure callback is not called twice
+  hide = false;
+  this.player.trigger('hideoverlay');
+
+  assert.strictEqual(hide, false, 'overlay shown');
 });
 
 QUnit.test('does not double add overlays that are triggered twice', function(assert) {
