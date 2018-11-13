@@ -36,8 +36,8 @@ const isNumber = n => typeof n === 'number' && n === n;
 /**
  * Whether a value is a string with no whitespace.
  *
- * @param  {String} s
- * @return {Boolean}
+ * @param  {string} s
+ * @return {boolean}
  */
 const hasNoWhitespace = s => typeof s === 'string' && (/^\S+$/).test(s);
 
@@ -111,11 +111,17 @@ class Overlay extends Component {
       dom.appendContent(el, content);
     }
 
+    // Call callback function when overlay is created
+    if (this.options_.onReady) {
+      this.options_.onReady();
+    }
+
     return el;
   }
 
   /**
    * Logs debug errors
+   *
    * @param  {...[type]} args [description]
    * @return {[type]}         [description]
    */
@@ -143,6 +149,10 @@ class Overlay extends Component {
   hide() {
     super.hide();
 
+    if (this.hidden) {
+      return this;
+    }
+
     this.debug('hidden');
     this.debug(`bound \`startListener_\` to "${this.startEvent_}"`);
 
@@ -152,7 +162,14 @@ class Overlay extends Component {
       this.off(this.player(), this.endEvent_, this.endListener_);
     }
 
+    // Call callback function when overlay is hidden
+    if (this.options_.onHide) {
+      this.options_.onHide();
+    }
+
     this.on(this.player(), this.startEvent_, this.startListener_);
+
+    this.hidden = true;
 
     return this;
   }
@@ -160,11 +177,11 @@ class Overlay extends Component {
   /**
    * Determine whether or not the overlay should hide.
    *
-   * @param  {Number} time
+   * @param  {number} time
    *         The current time reported by the player.
-   * @param  {String} type
+   * @param  {string} type
    *         An event type.
-   * @return {Boolean}
+   * @return {boolean}
    */
   shouldHide_(time, type) {
     const end = this.options_.end;
@@ -179,6 +196,11 @@ class Overlay extends Component {
    */
   show() {
     super.show();
+
+    if (!this.hidden) {
+      return this;
+    }
+
     this.off(this.player(), this.startEvent_, this.startListener_);
     this.debug('shown');
     this.debug(`unbound \`startListener_\` from "${this.startEvent_}"`);
@@ -189,17 +211,24 @@ class Overlay extends Component {
       this.on(this.player(), this.endEvent_, this.endListener_);
     }
 
+    // Call callback function when overlay is shown
+    if (this.options_.onShow) {
+      this.options_.onShow();
+    }
+
+    this.hidden = false;
+
     return this;
   }
 
   /**
    * Determine whether or not the overlay should show.
    *
-   * @param  {Number} time
+   * @param  {number} time
    *         The current time reported by the player.
-   * @param  {String} type
+   * @param  {string} type
    *         An event type.
-   * @return {Boolean}
+   * @return {boolean}
    */
   shouldShow_(time, type) {
     const start = this.options_.start;
