@@ -112,7 +112,7 @@ class Overlay extends Component {
     }
 
     // Call callback function when overlay is created
-    if (this.options_.onReady) {
+    if (typeof this.options_.onReady === 'function') {
       this.options_.onReady();
     }
 
@@ -165,7 +165,7 @@ class Overlay extends Component {
     }
 
     // Call callback function when overlay is hidden
-    if (this.options_.onHide) {
+    if (typeof this.options_.onHide === 'function') {
       this.options_.onHide();
     }
 
@@ -216,7 +216,7 @@ class Overlay extends Component {
     }
 
     // Call callback function when overlay is shown
-    if (this.options_.onShow) {
+    if (typeof this.options_.onShow === 'function') {
       this.options_.onShow();
     }
 
