@@ -149,6 +149,8 @@ class Overlay extends Component {
   hide() {
     super.hide();
 
+    // since there is a bug with removing the video.js event listeners, prevent the function from being called
+    // more than once
     if (this.hidden) {
       return this;
     }
@@ -197,6 +199,8 @@ class Overlay extends Component {
   show() {
     super.show();
 
+    // since there is a bug with removing the video.js event listeners, prevent the function from being called
+    // more than once
     if (!this.hidden) {
       return this;
     }
